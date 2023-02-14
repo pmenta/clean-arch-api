@@ -4,12 +4,16 @@ import type { HttpResponse, httpRequest } from '../protocols/http'
 
 export class SignUpController {
   handle (httpRequest: httpRequest): HttpResponse {
-    if (!httpRequest.body.name) {
-      return badRequest(new MissingParamError('Missing param: name'))
-    }
+    const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
+    const validatePayload = requiredFields.reduce((acc: string[], field) => {
+      if (!httpRequest.body[field]) {
+        return [...acc, field]
+      }
+      return acc
+    }, [])
 
-    if (!httpRequest.body.email) {
-      return badRequest(new MissingParamError('Missing param: email'))
+    if (validatePayload.length > 0) {
+      return badRequest(new MissingParamError(validatePayload.join(', ') + ''))
     }
 
     return {
