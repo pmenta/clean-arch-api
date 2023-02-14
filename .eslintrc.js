@@ -10,5 +10,8 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: './tsconfig.json'
+  },
+  rules: {
+    '@typescript-eslint/strict-boolean-expressions': 'off',
   }
 }
